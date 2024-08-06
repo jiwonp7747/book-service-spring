@@ -1,0 +1,4 @@
+rootProject.name = 'book_service_spring'
+include 'api'
+include 'db'
+

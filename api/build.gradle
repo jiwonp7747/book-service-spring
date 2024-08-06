@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+group = 'org.service'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':db') // 같은 레벨의 다른 모듈을 사용하겠다
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok' // 어노테이션 사용하기 때문
+    implementation 'org.springframework.boot:spring-boot-starter-web' // starter-web과 test는 세트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar{
+    enabled=true
+}
+
+jar{
+    enabled=false
+}
