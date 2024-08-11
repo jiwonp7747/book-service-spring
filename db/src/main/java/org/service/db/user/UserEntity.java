@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.service.db.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
 
@@ -31,8 +32,9 @@ public class UserEntity {
     @Column(length = 200, nullable = false)
     private String address;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 150, nullable = false)
-    private String status;
+    private UserStatus status;
 
     private LocalDateTime loginAt;
 

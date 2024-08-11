@@ -20,6 +20,8 @@ public class UserService {
     public UserDto register(UserRequest request) {
 
         // TODO status set 필요
+        var entity=userConverter.toEntity(request);
+
         return null;
     }
 }
