@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
+import org.service.db.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +22,7 @@ public class UserDto {
 
     private String address;
 
-    private String status;
+    private UserStatus status;
 
     private LocalDateTime loginAt;
 

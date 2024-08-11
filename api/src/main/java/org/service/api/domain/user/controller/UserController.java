@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.service.api.domain.user.controller.model.UserDto;
 import org.service.api.domain.user.controller.model.UserRequest;
 import org.service.api.domain.user.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,4 +23,10 @@ public class UserController {
         return userService.register(request);
     }
 
+    @GetMapping("")
+    public UserDto getUser(
+        @RequestParam Long id
+    ) {
+        return userService.me(id);
+    }
 }
