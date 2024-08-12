@@ -1,6 +1,8 @@
 package org.service.api.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.service.api.common.error.ErrorCode;
+import org.service.api.common.exception.ApiException;
 import org.service.api.domain.user.controller.UserController;
 import org.service.api.domain.user.controller.model.UserDto;
 import org.service.api.domain.user.controller.model.UserRequest;
@@ -29,16 +31,17 @@ public class UserService {
                     var newEntity=userRepository.save(entity);
                     return userConverter.toDto(newEntity);
                 })
-                .orElseThrow(NullPointerException::new);
+                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
     }
 
     public UserDto me(Long id) {
         var entity=userRepository.findFirstByIdAndStatusOrderByIdDesc(id, UserStatus.REGISTERED)
-                .orElseThrow(NullPointerException::new);
+                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
+
         return userConverter.toDto(entity);
     }
 
-    public UserDto unregister(UserRequest request) {
+    public UserDto unregister(Long id) {
         return null;
     }
 
