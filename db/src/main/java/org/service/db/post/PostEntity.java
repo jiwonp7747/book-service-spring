@@ -1,13 +1,21 @@
 package org.service.db.post;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.service.db.post.enums.PostStatus;
+import org.service.db.post.enums.PostType;
 
 import java.time.LocalDateTime;
 
 @Data
 @Table(name = "post")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostEntity {
 
     @Id
@@ -15,7 +23,8 @@ public class PostEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Integer boardType;
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
 
     @Column(length = 150, nullable = false)
     private String title;
@@ -24,7 +33,8 @@ public class PostEntity {
     private String content;
 
     @Column(length = 150, nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
 
     private LocalDateTime postedAt;
 
