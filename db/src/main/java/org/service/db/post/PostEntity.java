@@ -9,6 +9,7 @@ import org.service.db.post.enums.PostStatus;
 import org.service.db.post.enums.PostType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Table(name = "post")
@@ -38,6 +39,9 @@ public class PostEntity {
 
     private LocalDateTime postedAt;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long userId;
+
+    @Column(nullable = false)
+    private int price;
 }
