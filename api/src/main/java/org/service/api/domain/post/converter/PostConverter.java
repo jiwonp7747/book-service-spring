@@ -18,6 +18,7 @@ public class PostConverter { // 데이터 변환
                 .status(postEntity.getStatus())
                 .postedAt(postEntity.getPostedAt())
                 .userId(postEntity.getUserId())
+                .price(postEntity.getPrice())
                 .build()
                 ;
     }
@@ -28,6 +29,8 @@ public class PostConverter { // 데이터 변환
                 .title(request.getTitle())
                 .content(request.getContent())
                 .userId(request.getUserId())
+                .price(request.getPrice())
+                .postType(request.getPostType())
                 .build()
                 ;
     }
