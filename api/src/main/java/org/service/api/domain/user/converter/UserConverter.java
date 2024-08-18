@@ -14,7 +14,7 @@ public class UserConverter {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .address(request.getAddress())
-                .nickname(request.getNickName())
+                .nickname(request.getNickname())
                 .build();
     }
 
