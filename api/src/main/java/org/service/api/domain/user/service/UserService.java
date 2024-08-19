@@ -3,8 +3,11 @@ package org.service.api.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.service.api.common.error.ErrorCode;
 import org.service.api.common.exception.ApiException;
+import org.service.api.domain.token.business.TokenBusiness;
+import org.service.api.domain.token.controller.model.TokenResponse;
 import org.service.api.domain.user.controller.UserController;
 import org.service.api.domain.user.controller.model.UserDto;
+import org.service.api.domain.user.controller.model.UserLoginRequest;
 import org.service.api.domain.user.controller.model.UserRequest;
 import org.service.api.domain.user.converter.UserConverter;
 import org.service.db.user.UserRepository;
@@ -20,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserConverter userConverter;
+    private final TokenBusiness tokenBusiness;
 
     public UserDto register(UserRequest request) {
         var entity=userConverter.toEntity(request);
@@ -46,4 +50,11 @@ public class UserService {
     }
 
 
+    public TokenResponse login(UserLoginRequest request) {
+        var entity=userRepository.findFirstByEmailAndPasswordAndStatusOrderByIdDesc(request.getEmail(), request.getPassword(), UserStatus.REGISTERED)
+                .orElseThrow(()->new ApiException(ErrorCode.NULL_POINT));
+        var tokenResponse=tokenBusiness.issueToken(entity);
+
+        return tokenResponse;
+    }
 }
