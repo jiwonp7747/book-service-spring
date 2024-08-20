@@ -2,6 +2,7 @@ package org.service.api.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.service.api.common.error.ErrorCode;
+import org.service.api.common.error.UserErrorCode;
 import org.service.api.common.exception.ApiException;
 import org.service.api.domain.token.business.TokenBusiness;
 import org.service.api.domain.token.controller.model.TokenResponse;
@@ -10,6 +11,7 @@ import org.service.api.domain.user.controller.model.UserDto;
 import org.service.api.domain.user.controller.model.UserLoginRequest;
 import org.service.api.domain.user.controller.model.UserRequest;
 import org.service.api.domain.user.converter.UserConverter;
+import org.service.db.user.UserEntity;
 import org.service.db.user.UserRepository;
 import org.service.db.user.enums.UserStatus;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,11 @@ public class UserService {
                 .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
 
         return userConverter.toDto(entity);
+    }
+
+    public UserEntity getUserWithThrow(Long userId) {
+        return userRepository.findFirstByIdAndStatusOrderByIdDesc(userId, UserStatus.REGISTERED)
+                .orElseThrow(()->new ApiException(UserErrorCode.USER_NOT_FOUNT));
     }
 
     public UserDto unregister(Long id) {

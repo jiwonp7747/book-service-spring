@@ -31,4 +31,9 @@ public class TokenBusiness {
                 })
                 .orElseThrow(()-> new ApiException(ErrorCode.BAD_REQUEST));
     }
+
+    public Object validationAccessToken(String accessToken) {
+        var userId=tokenService.validationAccessToken(accessToken);
+        return userId;
+    }
 }

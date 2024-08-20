@@ -1,8 +1,13 @@
 package org.service.api.domain.token.helper;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
+import org.service.api.common.error.TokenErrorCode;
+import org.service.api.common.exception.ApiException;
 import org.service.api.domain.token.model.TokenDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,9 +17,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class JwtTokenHelper implements TokenHelperIfs{
 
     @Value("${token.secret.key}")
@@ -62,6 +69,32 @@ public class JwtTokenHelper implements TokenHelperIfs{
 
     @Override
     public Map<String, Object> validationTokenWithThrow(String token) {
-        return Map.of();
+        var key=Keys.hmacShaKeyFor(secretKey.getBytes());
+
+        var parser=Jwts.parser()
+                .setSigningKey(key)
+                .build();
+
+        try{
+            var result = parser.parseClaimsJws(token); // 토큰 문자열 파싱, 서명 검증, 클레임 추출 result는 Jws<Claims> 형식
+            log.info("토큰 문자열 파싱 결과: {}", result);
+
+            return new HashMap<String, Object>(result.getBody());
+
+        }catch (Exception e){
+
+            if(e instanceof SignatureException){
+                // 토큰이 유효하지 않을때
+                throw new ApiException(TokenErrorCode.INVALID_TOKEN, e);
+            }
+            else if(e instanceof ExpiredJwtException){
+                //  만료된 토큰
+                throw new ApiException(TokenErrorCode.EXPIRED_TOKEN, e);
+            }
+            else{
+                // 그외 에러
+                throw new ApiException(TokenErrorCode.TOKEN_EXCEPTION, e);
+            }
+        }
     }
 }
