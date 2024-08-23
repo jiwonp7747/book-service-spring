@@ -24,7 +24,7 @@ public class UserConverter {
                 .id(entity.getId())
                 .email(entity.getEmail())
                 .address(entity.getAddress())
-                .nickName(entity.getNickname())
+                .nickname(entity.getNickname())
                 .loginAt(entity.getLoginAt())
                 .registeredAt(entity.getRegisteredAt())
                 .unregisteredAt(entity.getUnregisteredAt())

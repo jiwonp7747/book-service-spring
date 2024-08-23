@@ -9,6 +9,7 @@ import org.service.api.domain.post.controller.model.PostRequest;
 import org.service.api.domain.post.converter.PostConverter;
 import org.service.db.image.ImageEntity;
 import org.service.db.image.ImageRepository;
+import org.service.db.post.PostEntity;
 import org.service.db.post.PostRepository;
 import org.service.db.post.enums.PostStatus;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,5 +94,9 @@ public class PostService { // 비즈니스 로직 처리
             dto.setImageUrl(imageEntity.getUrl());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public PostEntity getPostWithThrow(Long id) {
+        return postRepository.findById(id).orElseThrow(()->new ApiException(ErrorCode.NULL_POINT));
     }
 }

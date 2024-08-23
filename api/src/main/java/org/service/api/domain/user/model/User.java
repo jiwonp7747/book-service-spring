@@ -1,22 +1,25 @@
-package org.service.api.domain.user.controller.model;
+package org.service.api.domain.user.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.service.db.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
 
-@Data
 @Builder
-public class UserDto {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
 
     private Long id;
 
     private String email;
+
+    private String password;
 
     private String nickname;
 
