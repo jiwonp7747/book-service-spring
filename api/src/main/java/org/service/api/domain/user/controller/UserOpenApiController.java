@@ -34,13 +34,5 @@ public class UserOpenApiController {
         return userService.login(request);
     }
 
-    @GetMapping("")
-    public UserDto getUser(
-            @RequestParam Long id
-    ) {
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.add("Content-Type", "application/json; charset=UTF-8");
-        return userService.me(id);
-        //return new ResponseEntity<>(userService.me(id), headers, HttpStatus.OK);
-    }
+
 }
