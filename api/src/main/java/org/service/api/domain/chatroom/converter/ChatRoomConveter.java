@@ -25,6 +25,7 @@ public class ChatRoomConveter {
     public ChatRoomDto toDto(ChatRoomEntity newEntity, String anotherUserNickname, String imageUrl) {
 
         return ChatRoomDto.builder()
+                .id(newEntity.getId())
                 .anotherUserNickname(anotherUserNickname)
                 .imageUrl(imageUrl)
                 .build();

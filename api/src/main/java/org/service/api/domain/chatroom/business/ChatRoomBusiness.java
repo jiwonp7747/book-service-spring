@@ -8,10 +8,12 @@ import org.service.api.domain.chatroom.controller.model.ChatRoomDto;
 import org.service.api.domain.chatroom.converter.ChatRoomConveter;
 import org.service.api.domain.chatroom.service.ChatRoomService;
 import org.service.api.domain.chatroomuser.converter.ChatRoomUserConverter;
+import org.service.api.domain.chatroomuser.service.ChatRoomUserService;
 import org.service.api.domain.post.service.PostService;
 import org.service.api.domain.user.model.User;
 import org.service.api.domain.user.service.UserService;
 import org.service.db.chatroom.ChatRoomRepository;
+import org.service.db.chatroom.enums.ChatRoomStatus;
 import org.service.db.chatroomuser.ChatRoomUserRepository;
 import org.service.db.chatroomuser.enums.ChatRoomUserStatus;
 import org.service.db.image.ImageRepository;
@@ -19,6 +21,7 @@ import org.service.db.post.PostRepository;
 import org.service.db.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +43,7 @@ public class ChatRoomBusiness {
     private final ImageRepository imageRepository;
 
     private final UserService userService;
+    private final ChatRoomUserService chatRoomUserService;
 
     public ChatRoomDto register(User user, Long postId) {
         var postEntity=postService.getPostWithThrow(postId);
@@ -49,13 +53,13 @@ public class ChatRoomBusiness {
 
         // 사용자 본인 테이블 매핑용 entity 만들기 및 저장
         var chatRoomUserEntity=chatRoomUserConverter.toEntity(newChatRoomEntity.getId(), user.getId());
-        var newChatRoomUserEntity=chatRoomUserRepository.save(chatRoomUserEntity);
+        var newChatRoomUserEntity=chatRoomUserService.register(chatRoomUserEntity);
 
         // 상대 테이블 매핑용 entity 만들기
         // 게시글을 작성할 상대와 대화를 할 것이기 때문
         var anotherUserId=postEntity.getUserId();
         var chatRoomAnotherUserEntity=chatRoomUserConverter.toEntity(newChatRoomEntity.getId(), anotherUserId);
-        var newChatRoomAnotherUserEntity=chatRoomUserRepository.save(chatRoomAnotherUserEntity);
+        var newChatRoomAnotherUserEntity=chatRoomUserService.register(chatRoomAnotherUserEntity);
 
         // 클라이언트에 내릴 데이터 생성
         var imageEntity=imageRepository.findFirstByPostIdOrderByIdDesc(postId).orElseThrow(()->new ApiException(ErrorCode.NULL_POINT));
@@ -95,4 +99,5 @@ public class ChatRoomBusiness {
             return chatRoomConveter.toDto(chatRoomEntity ,anotherUserNickname, imageEntity.getUrl());
         }).collect(Collectors.toList());
     }
+
 }
