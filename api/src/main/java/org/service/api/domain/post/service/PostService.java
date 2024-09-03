@@ -7,6 +7,7 @@ import org.service.api.common.exception.ApiException;
 import org.service.api.domain.post.controller.model.PostDto;
 import org.service.api.domain.post.controller.model.PostRequest;
 import org.service.api.domain.post.converter.PostConverter;
+import org.service.api.domain.user.model.User;
 import org.service.db.image.ImageEntity;
 import org.service.db.image.ImageRepository;
 import org.service.db.post.PostEntity;
@@ -39,8 +40,8 @@ public class PostService { // 비즈니스 로직 처리
     @Value("${image.access.url}")
     private String accessUrl;
 
-    public PostDto register(PostRequest request) throws IOException {
-        var postEntity =postConverter.toEntity(request);
+    public PostDto register(PostRequest request, User user) throws IOException {
+        var postEntity =postConverter.toEntity(request, user);
         postEntity.setPostedAt(LocalDateTime.now());
         postEntity.setStatus(PostStatus.REGISTERED);
 
@@ -98,5 +99,9 @@ public class PostService { // 비즈니스 로직 처리
 
     public PostEntity getPostWithThrow(Long id) {
         return postRepository.findById(id).orElseThrow(()->new ApiException(ErrorCode.NULL_POINT));
+    }
+
+    public List<PostEntity> getPostListWithUserId(Long userId) {
+        return postRepository.findAllByUserIdAndStatusOrderByIdDesc(userId, PostStatus.REGISTERED);
     }
 }

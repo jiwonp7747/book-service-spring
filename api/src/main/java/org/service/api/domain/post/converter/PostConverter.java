@@ -2,6 +2,7 @@ package org.service.api.domain.post.converter;
 
 import org.service.api.domain.post.controller.model.PostDto;
 import org.service.api.domain.post.controller.model.PostRequest;
+import org.service.api.domain.user.model.User;
 import org.service.db.post.PostEntity;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,18 @@ public class PostConverter { // 데이터 변환
                 .postType(request.getPostType())
                 .title(request.getTitle())
                 .content(request.getContent())
-                .userId(request.getUserId())
+                .price(request.getPrice())
+                .postType(request.getPostType())
+                .build()
+                ;
+    }
+
+    public PostEntity toEntity(PostRequest request, User user) {
+        return PostEntity.builder()
+                .postType(request.getPostType())
+                .title(request.getTitle())
+                .content(request.getContent())
+                .userId(user.getId())
                 .price(request.getPrice())
                 .postType(request.getPostType())
                 .build()
