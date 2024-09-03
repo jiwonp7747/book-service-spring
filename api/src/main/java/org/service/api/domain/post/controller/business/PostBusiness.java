@@ -2,18 +2,24 @@ package org.service.api.domain.post.controller.business;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.service.api.common.error.ErrorCode;
+import org.service.api.common.exception.ApiException;
 import org.service.api.domain.post.controller.model.PostDto;
 import org.service.api.domain.post.controller.model.PostRequest;
 import org.service.api.domain.post.converter.PostConverter;
 import org.service.api.domain.post.service.PostService;
+import org.service.api.domain.user.model.User;
 import org.service.db.image.ImageEntity;
+import org.service.db.image.ImageRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,38 +33,19 @@ public class PostBusiness {
 
     private final PostService postService;
     private final PostConverter postConverter;
+    private final ImageRepository imageRepository;
 
-    public PostDto register(PostRequest request) {
-        var postEntity =postConverter.toEntity(request);
+    public List<PostDto> getPostListWithUserId(User user) {
+        var entityList=postService.getPostListWithUserId(user.getId());
 
-        /*//실제 경로 가져오기
-        File staticImagesDir=new ClassPathResource("static/images").getFile();
-        String realPath=staticImagesDir.getAbsolutePath();
-        //String realPath="/Users/jiwonp/patamon/book_service_spring/api/src/main/resources/static/images";
-        log.info("실제경로 입니다아아앙: {}", realPath);
-
-        for (MultipartFile file : request.getFiles()) {
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            String filePath = realPath + File.separator + fileName;
-            String fileUrl = accessUrl + fileName;
-
-            // logging
-            System.out.println(filePath);
-
-            File dest = new File(filePath);
-            if(!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
-            }
-            file.transferTo(dest);
-
-            var imageEntity= ImageEntity.builder()
-                    .postId(newEntity.getId())
-                    .url(fileUrl)
-                    .path(filePath)
-                    .build();
-            imageRepository.save(imageEntity);
-        }*/
-
-        return null;
+        return entityList.stream().map(it->{
+            var dto=postConverter.toDto(it);
+            var imageEntity=imageRepository.findFirstByPostIdOrderByIdDesc(it.getId())
+                    .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT));
+            dto.setImageUrl(imageEntity.getUrl());
+            return dto;
+        })
+                .collect(Collectors.toList());
     }
+
 }
