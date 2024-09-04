@@ -4,6 +4,7 @@
 
 ## API 명세 
 |Domain|Method|Url|Description|
+|-----|-----|-----|-----
 |내용|내용|내용|내용|
 
 ## ERD 설계 
