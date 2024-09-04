@@ -23,7 +23,17 @@
 |reply|POST|/api/reply|교환 요청 댓글 작성|
 |reply|GET|/api/reply/get-list|해당 게시글 댓글 리스트 가져오기|
 
+#### chatroom
+|Domain|Method|Url|Description|
+|-----|-----|-----|-----|
+|ChatRoom|POST|/api/chat-room|채팅방 생성하기|
+|ChatRoom|GET|/api/chat-room/get-list|유저가 참여하고 있는 채팅방 목록 가져오기|
 
+#### chatmessage
+|Domain|Method|Url|Description|
+|-----|-----|-----|-----|
+|ChatMessage|POST|/api/chat-message/register|채팅방 입력하기|
+|ChatMessage|GET|/api/chat-message/get-list|채팅방 채팅 리스트 가져오기|
 
 ## ERD 설계 
 
