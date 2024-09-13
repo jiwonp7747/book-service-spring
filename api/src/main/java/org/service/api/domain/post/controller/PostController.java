@@ -26,7 +26,7 @@ public class PostController {
     private final PostBusiness postBusiness;
 
     // 게시글 등록
-    @PostMapping("/register")
+    @PostMapping("")
     public PostDto register(
             @ModelAttribute PostRequest request,
             @UserSession User user
@@ -36,12 +36,14 @@ public class PostController {
         return postService.register(request, user);
     }
 
+    @PostMapping("/")
+
     // 전체 게시글 가져오기
     @GetMapping("/get-list")
     public List<PostDto> getList(
-
+            @UserSession User user
     ) {
-        return postService.getList();
+        return postService.getList(user);
     }
 
     // 유저별 게시글 가져오기

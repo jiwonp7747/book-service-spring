@@ -38,4 +38,10 @@ public class ReplyController {
     }
 
     // 유저가 쓴 댓글들 가져오기
+    @GetMapping("/get-list/user")
+    public List<ReplyDto> getListByUser(
+
+    ) {
+        return null;
+    }
 }

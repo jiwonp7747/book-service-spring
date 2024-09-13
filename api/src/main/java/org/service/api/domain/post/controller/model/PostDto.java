@@ -28,9 +28,10 @@ public class PostDto { // 응답 주는 용도
 
     private LocalDateTime postedAt;
 
-    private Long userId;
-
     private int price;
 
     private String imageUrl;
+
+    private String nickname;
+
 }

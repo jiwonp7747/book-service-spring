@@ -48,13 +48,12 @@ public class PostService { // 비즈니스 로직 처리
         //실제 경로 가져오기
         File staticImagesDir=new ClassPathResource("static/images").getFile();
         String realPath=staticImagesDir.getAbsolutePath();
-        //String realPath="/Users/jiwonp/patamon/book_service_spring/api/src/main/resources/static/images";
         log.info("실제경로 입니다아아앙: {}", realPath);
 
         var newEntity=postRepository.save(postEntity);
         log.info("new Entity: {}", newEntity);
 
-        List<ImageEntity> images=new ArrayList<>();
+//        List<ImageEntity> images=new ArrayList<>();
         for (MultipartFile file : request.getFiles()) {
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             String filePath = realPath + File.separator + fileName;
@@ -80,7 +79,7 @@ public class PostService { // 비즈니스 로직 처리
         return postConverter.toDto(newEntity);
     }
 
-    public List<PostDto> getList() {
+    public List<PostDto> getList(User user) {
         var entityList= postRepository.findAll();
 
         return entityList.stream().map(it->{

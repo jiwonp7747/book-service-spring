@@ -23,10 +23,6 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 값 삽입시 기본키 생성을 데이터베이스에 위임
     private Long id;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PostType postType;
-
     @Column(length = 150, nullable = false)
     private String title;
 
@@ -39,7 +35,7 @@ public class PostEntity {
 
     private LocalDateTime postedAt;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Long userId;
 
     @Column(nullable = false)
