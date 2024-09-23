@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.service.api.domain.post.service.PostService;
 import org.service.api.domain.reply.controller.model.ReplyDto;
 import org.service.api.domain.reply.controller.model.ReplyRequest;
+import org.service.api.domain.reply.controller.model.ReplyResponse;
 import org.service.api.domain.reply.converter.ReplyConverter;
 import org.service.api.domain.reply.service.ReplyService;
 import org.service.api.domain.user.model.User;
@@ -60,5 +61,20 @@ public class ReplyBusiness {
         return replyEntityList.stream().map(it->{
             return replyConverter.toDto(it);
         }).collect(Collectors.toList());
+    }
+
+    // 유저의 교환 요청 리스트 가져오기
+    public List<ReplyResponse> getListWithUser(User user) {
+
+        // 유저 아이디에 해당하는 ReplyEntity 리스트 가져오기
+        var replyEntityList=replyRepository.findAllByUserIdAndStatusOrderByIdDesc(user.getId(), ReplyStatus.REGISTERED);
+        // ReplyEntity 를 ReplyResponse로 변환
+
+        return replyEntityList.stream().map(
+                entity->{
+                    return replyConverter.toResponse(entity);
+                }
+        ).collect(Collectors.toList());
+
     }
 }

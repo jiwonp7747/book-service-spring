@@ -7,7 +7,9 @@ import org.service.api.common.exception.ApiException;
 import org.service.api.domain.post.controller.model.PostDto;
 import org.service.api.domain.post.controller.model.PostRequest;
 import org.service.api.domain.post.converter.PostConverter;
+import org.service.api.domain.user.converter.UserConverter;
 import org.service.api.domain.user.model.User;
+import org.service.api.domain.user.service.UserService;
 import org.service.db.image.ImageEntity;
 import org.service.db.image.ImageRepository;
 import org.service.db.post.PostEntity;
@@ -34,6 +36,8 @@ public class PostService { // 비즈니스 로직 처리
     private final PostRepository postRepository;
     private final PostConverter postConverter;
     private final ImageRepository imageRepository;
+    private final UserConverter userConverter;
+    private final UserService userService;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
@@ -41,7 +45,8 @@ public class PostService { // 비즈니스 로직 처리
     private String accessUrl;
 
     public PostDto register(PostRequest request, User user) throws IOException {
-        var postEntity =postConverter.toEntity(request, user);
+        var userEntity=userService.getUserWithThrow(user.getId());
+        var postEntity =postConverter.toEntity(request, userEntity);
         postEntity.setPostedAt(LocalDateTime.now());
         postEntity.setStatus(PostStatus.REGISTERED);
 
@@ -69,7 +74,7 @@ public class PostService { // 비즈니스 로직 처리
             file.transferTo(dest);
 
            var imageEntity=ImageEntity.builder()
-                   .postId(newEntity.getId())
+                   .post(newEntity)
                    .url(fileUrl)
                    .path(filePath)
                    .build();
@@ -78,6 +83,12 @@ public class PostService { // 비즈니스 로직 처리
 
         return postConverter.toDto(newEntity);
     }
+
+    public PostDto update(Long id, PostRequest request, User user) throws IOException {
+
+        return null;
+    }
+
 
     public List<PostDto> getList(User user) {
         var entityList= postRepository.findAll();
@@ -102,5 +113,9 @@ public class PostService { // 비즈니스 로직 처리
 
     public List<PostEntity> getPostListWithUserId(Long userId) {
         return postRepository.findAllByUserIdAndStatusOrderByIdDesc(userId, PostStatus.REGISTERED);
+    }
+
+    public void delete(Long id) {
+        postRepository.deleteById(id);
     }
 }

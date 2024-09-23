@@ -18,8 +18,6 @@ public class PostDto { // 응답 주는 용도
 
     private Long id;
 
-    private PostType postType;
-
     private String title;
 
     private String content;

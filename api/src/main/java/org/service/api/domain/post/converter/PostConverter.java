@@ -8,6 +8,7 @@ import org.service.api.domain.post.service.PostService;
 import org.service.api.domain.user.model.User;
 import org.service.api.domain.user.service.UserService;
 import org.service.db.post.PostEntity;
+import org.service.db.user.UserEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,7 @@ public class PostConverter { // 데이터 변환
     private final UserService userService;
 
     public PostDto toDto(PostEntity postEntity) {
-        var userId= postEntity.getUserId();
+        var userId= postEntity.getUser().getId();
         var nickname=userService.getUserWithThrow(userId).getNickname();
 
         return PostDto.builder()
@@ -42,11 +43,11 @@ public class PostConverter { // 데이터 변환
                 ;
     }
 
-    public PostEntity toEntity(PostRequest request, User user) {
+    public PostEntity toEntity(PostRequest request, UserEntity user) {
         return PostEntity.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
-                .userId(user.getId())
+                .user(user)
                 .price(request.getPrice())
                 .build()
                 ;

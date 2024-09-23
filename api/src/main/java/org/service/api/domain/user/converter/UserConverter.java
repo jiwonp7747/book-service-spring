@@ -2,6 +2,7 @@ package org.service.api.domain.user.converter;
 
 import org.service.api.domain.user.controller.model.UserDto;
 import org.service.api.domain.user.controller.model.UserRequest;
+import org.service.api.domain.user.model.User;
 import org.service.db.user.UserEntity;
 import org.springframework.stereotype.Service;
 

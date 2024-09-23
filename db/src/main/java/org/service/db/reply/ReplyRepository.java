@@ -8,4 +8,6 @@ import java.util.List;
 public interface ReplyRepository extends JpaRepository<ReplyEntity, Long> {
     // select * from reply where post_id=? and status=? order by id desc;
     List<ReplyEntity> findAllByPostIdAndStatusOrderByIdDesc(Long postId, ReplyStatus status);
+    // select * from reply where user_id=? and status=? order by id desc;
+    List<ReplyEntity> findAllByUserIdAndStatusOrderByIdDesc(Long userId, ReplyStatus status);
 }

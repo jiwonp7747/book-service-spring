@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.service.db.image.ImageEntity;
 import org.service.db.post.enums.PostStatus;
 import org.service.db.post.enums.PostType;
+import org.service.db.user.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,9 +37,13 @@ public class PostEntity {
 
     private LocalDateTime postedAt;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     @Column(nullable = false)
     private int price;
+
+    @OneToMany(mappedBy = "post")
+    private List<ImageEntity> image;
 }

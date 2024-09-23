@@ -7,6 +7,7 @@ import org.service.api.common.annotation.UserSession;
 import org.service.api.domain.reply.business.ReplyBusiness;
 import org.service.api.domain.reply.controller.model.ReplyDto;
 import org.service.api.domain.reply.controller.model.ReplyRequest;
+import org.service.api.domain.reply.controller.model.ReplyResponse;
 import org.service.api.domain.user.model.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class ReplyController {
     }
 
     // 게시글에 해당하는 교환 댓글 가져오기
+    // 지금은 필요없어진 api
     @GetMapping("/get-list")
     public List<ReplyDto> getList(
             @RequestParam Long postId
@@ -39,9 +41,9 @@ public class ReplyController {
 
     // 유저가 쓴 댓글들 가져오기
     @GetMapping("/get-list/user")
-    public List<ReplyDto> getListByUser(
-
+    public List<ReplyResponse> getListByUser(
+            @UserSession User user
     ) {
-        return null;
+        return replyBusiness.getListWithUser(user);
     }
 }

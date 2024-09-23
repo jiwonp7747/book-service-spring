@@ -31,13 +31,30 @@ public class PostController {
             @ModelAttribute PostRequest request,
             @UserSession User user
             ) throws IOException {
+        // 파일 잘 들어오는 지 로그
         request.getFiles().forEach(file -> log.info("file = {}", file.getOriginalFilename()));
 
         return postService.register(request, user);
     }
 
-    @PostMapping("/")
+    // 게시글 수정
+    @PatchMapping("/{id}")
+    public PostDto update(
+            @PathVariable("id") Long id,
+            @ModelAttribute PostRequest request,
+            @UserSession User user
+    ) throws IOException {
+        return postService.update(id, request, user);
+    }
 
+    // 게시글 삭제
+    @DeleteMapping("/{id}")
+    public void delete(
+            @PathVariable("id") Long id,
+            @UserSession User user
+    ) {
+        postBusiness.delete(id, user);
+    }
     // 전체 게시글 가져오기
     @GetMapping("/get-list")
     public List<PostDto> getList(
