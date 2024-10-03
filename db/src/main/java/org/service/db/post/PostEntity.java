@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.service.db.image.ImageEntity;
 import org.service.db.post.enums.PostStatus;
 import org.service.db.post.enums.PostType;
+import org.service.db.user.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,10 +25,6 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 값 삽입시 기본키 생성을 데이터베이스에 위임
     private Long id;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PostType postType;
-
     @Column(length = 150, nullable = false)
     private String title;
 
@@ -39,9 +37,13 @@ public class PostEntity {
 
     private LocalDateTime postedAt;
 
-    @Column(nullable = true)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     @Column(nullable = false)
     private int price;
+
+    @OneToMany(mappedBy = "post")
+    private List<ImageEntity> image;
 }

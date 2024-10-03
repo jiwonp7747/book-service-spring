@@ -24,6 +24,8 @@ public class ImageEntity {
     @Column(nullable = false, length = 300)
     private String url;
 
-    @Column(nullable = true)
-    private Long postId; // Post 테이블의 외래 키
+    @JoinColumn(name = "post_id")
+    @ManyToOne
+    private PostEntity post; // Post 테이블의 외래 키
+
 }

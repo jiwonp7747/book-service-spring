@@ -48,4 +48,11 @@ public class PostBusiness {
                 .collect(Collectors.toList());
     }
 
+    public void delete(Long id, User user) {
+
+
+
+
+        postService.delete(id);
+    }
 }

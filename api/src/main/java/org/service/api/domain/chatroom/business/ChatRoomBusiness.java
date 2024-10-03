@@ -57,7 +57,7 @@ public class ChatRoomBusiness {
 
         // 상대 테이블 매핑용 entity 만들기
         // 게시글을 작성할 상대와 대화를 할 것이기 때문
-        var anotherUserId=postEntity.getUserId();
+        var anotherUserId=postEntity.getUser().getId();
         var chatRoomAnotherUserEntity=chatRoomUserConverter.toEntity(newChatRoomEntity.getId(), anotherUserId);
         var newChatRoomAnotherUserEntity=chatRoomUserService.register(chatRoomAnotherUserEntity);
 
@@ -90,7 +90,7 @@ public class ChatRoomBusiness {
 
             var postEntity=chatRoomEntity.getPost();
 
-            var userId=postEntity.getUserId();
+            var userId=postEntity.getUser().getId();
             var userEntity=userService.getUserWithThrow(userId);
             var anotherUserNickname=userEntity.getNickname();
 

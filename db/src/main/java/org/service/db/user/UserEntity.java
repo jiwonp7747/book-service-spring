@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.service.db.post.PostEntity;
 import org.service.db.user.enums.UserStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity(name = "user")
@@ -35,6 +37,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 150, nullable = false)
     private UserStatus status;
+
+    @OneToMany(mappedBy = "user")
+    private List<PostEntity> post;
 
     private LocalDateTime loginAt;
 

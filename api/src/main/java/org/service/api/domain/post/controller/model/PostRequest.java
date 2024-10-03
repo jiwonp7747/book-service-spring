@@ -19,9 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PostRequest { // 요청 받는 용도
 
-    @NotNull
-    private PostType postType;
-
     @NotBlank
     private String title;
 
