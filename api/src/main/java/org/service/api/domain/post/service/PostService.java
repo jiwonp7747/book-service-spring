@@ -2,6 +2,7 @@ package org.service.api.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.service.api.common.error.ErrorCode;
 import org.service.api.common.exception.ApiException;
 import org.service.api.domain.post.controller.model.PostDto;
@@ -17,6 +18,7 @@ import org.service.db.post.PostRepository;
 import org.service.db.post.enums.PostStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -105,6 +107,31 @@ public class PostService { // 비즈니스 로직 처리
             dto.setImageUrl(imageEntity.getUrl());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public Page<PostDto> getListByPage(User user, int page, int size) {
+
+        // Pageable 인스턴스 생성
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Page 가져오기
+        var entityPage=postRepository.findByStatusOrderByIdDesc(PostStatus.REGISTERED, pageable);
+
+        // 엔티티 리스트를 DTO 리스트로 변환
+        List<PostDto> dtoList= entityPage.stream().map(it->{
+            var dto=postConverter.toDto(it);
+            var postId=it.getId();
+
+            var imageEntity=imageRepository.findFirstByPostIdOrderByIdDesc(postId)
+                    .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
+
+            //var imageEntityList=imageRepository.findAllByPostIdOrderByIdDesc(postId);
+
+            dto.setImageUrl(imageEntity.getUrl());
+            return dto;
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, pageable, entityPage.getTotalElements());
     }
 
     public PostEntity getPostWithThrow(Long id) {

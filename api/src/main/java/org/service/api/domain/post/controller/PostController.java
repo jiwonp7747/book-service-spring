@@ -3,12 +3,14 @@ package org.service.api.domain.post.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.service.api.common.annotation.UserSession;
 import org.service.api.domain.post.controller.business.PostBusiness;
 import org.service.api.domain.post.controller.model.PostDto;
 import org.service.api.domain.post.controller.model.PostRequest;
 import org.service.api.domain.post.service.PostService;
 import org.service.api.domain.user.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,12 +58,24 @@ public class PostController {
         postBusiness.delete(id, user);
     }
     // 전체 게시글 가져오기
-    @GetMapping("/get-list")
+    @GetMapping("/get-list/all")
     public List<PostDto> getList(
             @UserSession User user
     ) {
         return postService.getList(user);
     }
+
+    // 정해진 갯수만크 게시글 가져오기
+    @GetMapping("/get-list/page")
+    public Page<PostDto> getListByPage(
+            @UserSession User user,
+            @RequestParam(name="page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        log.info("Page 쿼리 확인 !!!!!: page = {}, size = {}", page, size);
+        return postService.getListByPage(user, page, size);
+    }
+
 
     // 유저별 게시글 가져오기
     @GetMapping("/get-list/user")
