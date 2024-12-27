@@ -35,6 +35,6 @@
 |ChatMessage|POST|/api/chat-message/register|채팅방 입력하기|
 |ChatMessage|GET|/api/chat-message/get-list|채팅방 채팅 리스트 가져오기|
 
-## ERD 설계 
+
 
 
